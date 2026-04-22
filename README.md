@@ -1,44 +1,44 @@
 # SpecPilot
 
-SpecPilot is a portfolio-ready API testing platform focused on importing Postman collections, running request suites, and visualizing execution history in a simple web interface.
+O SpecPilot e uma plataforma de testes de API pensada para portfólio, focada em importar collections do Postman, executar suites de requests e visualizar o histórico das execuções em uma interface web simples.
 
-It was built as a full-stack MVP to demonstrate product thinking, backend architecture, authenticated workflows, Swagger-first API design, and a practical frontend for QA-oriented automation.
+O projeto foi construído como um MVP full stack para demonstrar visão de produto, arquitetura de backend, fluxos autenticados, desenvolvimento guiado por Swagger e uma interface prática para automação orientada a QA.
 
-## Highlights
+## Destaques
 
-- Import Postman collections in JSON format
-- Authenticate users with JWT
-- Store collections and execution history in PostgreSQL
-- Run API requests directly from imported collections
-- Visualize pass, fail, and error counts
-- Explore and test backend endpoints with Swagger
-- Includes a demo CRUD API for local testing and portfolio walkthroughs
+- Importação de collections do Postman em JSON
+- Autenticação de usuários com JWT
+- Persistência de collections e histórico de execuções em PostgreSQL
+- Execução de requests diretamente a partir das collections importadas
+- Visualização de aprovados, falhas e erros
+- Exploração e teste de endpoints do backend com Swagger
+- Módulo CRUD de demonstração para uso local e apresentação do projeto
 
-## Tech Stack
+## Stack Tecnológica
 
 - Frontend: React 18, TypeScript, Vite, Zustand, Tailwind CSS
 - Backend: NestJS, TypeORM, PostgreSQL, JWT, Swagger
-- Tooling: Docker Compose, ESLint, Prettier
+- Ferramentas: Docker Compose, ESLint, Prettier
 
-## Screenshots
+## Capturas de Tela
 
-These portfolio assets are already included in the repository and can be used in GitHub previews or case-study pages.
+Estes assets de portfólio já estão incluídos no repositório e podem ser usados em previews no GitHub ou páginas de case.
 
-![SpecPilot overview](./docs/screenshots/specpilot-overview.svg)
-![SpecPilot execution flow](./docs/screenshots/specpilot-execution.svg)
-![SpecPilot swagger module](./docs/screenshots/specpilot-swagger.svg)
+![Visão geral do SpecPilot](./docs/screenshots/specpilot-overview.svg)
+![Fluxo de execução do SpecPilot](./docs/screenshots/specpilot-execution.svg)
+![Módulo Swagger do SpecPilot](./docs/screenshots/specpilot-swagger.svg)
 
-## Product Flow
+## Fluxo do Produto
 
-1. Register or sign in
-2. Upload a Postman collection
-3. Configure an optional base URL
-4. Execute the imported requests
-5. Review history, status codes, and execution outcomes
+1. Registrar ou fazer login
+2. Enviar uma collection do Postman
+3. Configurar uma base URL opcional
+4. Executar os requests importados
+5. Revisar histórico, status HTTP e resultados da execução
 
-## Demo Endpoints
+## Endpoints de Demonstração
 
-The project includes a simple demo module for local showcase and testing:
+O projeto inclui um módulo simples para apresentação local e testes:
 
 ```text
 GET    /api/demo-items
@@ -48,77 +48,77 @@ PATCH  /api/demo-items/:id
 DELETE /api/demo-items/:id
 ```
 
-Swagger is available at [http://localhost:3001/api/docs](http://localhost:3001/api/docs).
+A documentação Swagger fica disponível em [http://localhost:3001/api/docs](http://localhost:3001/api/docs).
 
-## Local Setup
+## Configuração Local
 
 ```bash
-# 1. Start PostgreSQL
-# Reuses an existing local `testaix-postgres` container when available
+# 1. Subir o PostgreSQL
+# Reaproveita um container local `testaix-postgres` quando ele já existir
 npm run db:up
 
-# 2. Configure backend env
+# 2. Configurar ambiente do backend
 cp backend/.env.example backend/.env
 
-# 3. Configure frontend env
+# 3. Configurar ambiente do frontend
 cp frontend/.env.example frontend/.env
 
-# 4. Run backend
+# 4. Rodar backend
 cd backend
 npm install
 npm run start:dev
 
-# 5. Run frontend
+# 5. Rodar frontend
 cd ../frontend
 npm install
 npm run dev
 ```
 
-App URLs:
+URLs da aplicação:
 
 - Frontend: `http://localhost:3002`
 - Backend: `http://localhost:3001`
 - Swagger: `http://localhost:3001/api/docs`
 
-## Portfolio Notes
+## Observações Para Portfólio
 
-This repository is safe to publish publicly as a portfolio project, with one important rule: do not commit local `.env` files.
+Este repositório pode ser publicado com segurança como projeto de portfólio, com uma regra importante: não versionar arquivos `.env` locais.
 
-- Keep `backend/.env` and `frontend/.env` local only
-- Use `*.env.example` as public configuration templates
-- The credentials in examples such as `postgres/postgres` are development-only placeholders
-- Replace any secret immediately if it was ever used in a real environment
+- Mantenha `backend/.env` e `frontend/.env` apenas no ambiente local
+- Use `*.env.example` como templates públicos de configuração
+- Credenciais como `postgres/postgres` existem apenas como placeholders de desenvolvimento
+- Troque qualquer segredo imediatamente se ele tiver sido usado em um ambiente real
 
-## Repository Structure
+## Estrutura do Repositório
 
 ```text
-POC_API/
-├── backend/
-│   ├── src/modules/auth
-│   ├── src/modules/collections
-│   ├── src/modules/demo-items
-│   └── src/modules/test-executions
-├── frontend/
-│   ├── src/pages
-│   ├── src/services
-│   └── src/stores
-├── docs/
-│   ├── screenshots/
-│   └── *.json
-├── docker-compose.yml
-└── README.md
+SpecPilot/
+|-- backend/
+|   |-- src/modules/auth
+|   |-- src/modules/collections
+|   |-- src/modules/demo-items
+|   `-- src/modules/test-executions
+|-- frontend/
+|   |-- src/pages
+|   |-- src/services
+|   `-- src/stores
+|-- docs/
+|   |-- screenshots/
+|   `-- *.json
+|-- docker-compose.yml
+`-- README.md
 ```
 
-## Why This Project Matters
+## Por Que Este Projeto Importa
 
-SpecPilot is a strong portfolio piece because it combines:
+O SpecPilot e um bom projeto de portfólio porque combina:
 
-- real authentication and protected routes
-- database persistence
-- background-style API execution logic
-- documentation-first backend development
-- practical QA and developer experience use cases
+- autenticação real e rotas protegidas
+- persistência em banco de dados
+- lógica de execução de APIs em estilo assíncrono
+- desenvolvimento de backend orientado por documentação
+- casos de uso práticos para QA e experiência de desenvolvedor
 
-## Author
+## Autor
 
 Jefferson Reis
