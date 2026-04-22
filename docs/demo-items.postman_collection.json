@@ -1,0 +1,156 @@
+{
+  "info": {
+    "_postman_id": "3bc515fa-a84d-4b02-a55a-fad79d1ec11b",
+    "name": "SpecPilot Demo Items API",
+    "description": "Collection de exemplo para testar upload, execucao e historico dos endpoints demo-items no SpecPilot.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Demo Items",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/demo-items",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "demo-items"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Demo Item",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Primeiro item de teste\",\n  \"description\": \"Criado pela collection de exemplo do SpecPilot.\",\n  \"completed\": false\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/demo-items",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "demo-items"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Demo Item By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/demo-items/{{demoItemId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "demo-items",
+            "{{demoItemId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Demo Item",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Item atualizado\",\n  \"description\": \"Alterado via PATCH para validar o fluxo de update.\",\n  \"completed\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/demo-items/{{demoItemId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "demo-items",
+            "{{demoItemId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Demo Item",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/demo-items/{{demoItemId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "demo-items",
+            "{{demoItemId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "demoItemId",
+      "value": "cole-o-id-retornado-no-post"
+    }
+  ]
+}

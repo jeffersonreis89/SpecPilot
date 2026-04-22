@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <rect width="1600" height="900" fill="#0f172a"/>
+  <text x="100" y="130" fill="#f8fafc" font-size="68" font-family="Arial, sans-serif" font-weight="700">Execution Flow</text>
+  <text x="100" y="185" fill="#cbd5e1" font-size="28" font-family="Arial, sans-serif">From collection upload to test result visualization</text>
+  <rect x="90" y="280" width="260" height="180" rx="24" fill="#1d4ed8"/>
+  <rect x="470" y="280" width="260" height="180" rx="24" fill="#2563eb"/>
+  <rect x="850" y="280" width="260" height="180" rx="24" fill="#059669"/>
+  <rect x="1230" y="280" width="260" height="180" rx="24" fill="#f59e0b"/>
+  <text x="140" y="355" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700">Upload</text>
+  <text x="140" y="405" fill="#dbeafe" font-size="24" font-family="Arial, sans-serif">Postman JSON</text>
+  <text x="510" y="355" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700">Parse</text>
+  <text x="510" y="405" fill="#dbeafe" font-size="24" font-family="Arial, sans-serif">Resolve variables</text>
+  <text x="900" y="355" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700">Execute</text>
+  <text x="900" y="405" fill="#d1fae5" font-size="24" font-family="Arial, sans-serif">Axios requests</text>
+  <text x="1270" y="355" fill="#ffffff" font-size="34" font-family="Arial, sans-serif" font-weight="700">Report</text>
+  <text x="1270" y="405" fill="#fef3c7" font-size="24" font-family="Arial, sans-serif">History and stats</text>
+  <line x1="350" y1="370" x2="470" y2="370" stroke="#93c5fd" stroke-width="10"/>
+  <line x1="730" y1="370" x2="850" y2="370" stroke="#93c5fd" stroke-width="10"/>
+  <line x1="1110" y1="370" x2="1230" y2="370" stroke="#93c5fd" stroke-width="10"/>
+  <rect x="90" y="560" width="1400" height="190" rx="28" fill="#111827" stroke="#334155" stroke-width="2"/>
+  <text x="130" y="635" fill="#f8fafc" font-size="32" font-family="Arial, sans-serif" font-weight="700">Included demo module</text>
+  <text x="130" y="690" fill="#cbd5e1" font-size="24" font-family="Arial, sans-serif">GET, POST, PATCH, and DELETE endpoints are available locally so the platform can be demonstrated end-to-end without relying on third-party APIs.</text>
+</svg>
