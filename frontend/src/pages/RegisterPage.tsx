@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
-import { authApi } from '../services/api'
+import { authApi, getApiErrorMessage } from '../services/api'
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' })
@@ -10,7 +10,7 @@ export default function RegisterPage() {
   const navigate = useNavigate()
   const { login } = useAuthStore()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setError('')
@@ -25,8 +25,8 @@ export default function RegisterPage() {
 
       login(accessToken, { id, email: formData.email, name })
       navigate('/')
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao registrar')
+    } catch (error) {
+      setError(getApiErrorMessage(error, 'Erro ao registrar'))
     } finally {
       setLoading(false)
     }

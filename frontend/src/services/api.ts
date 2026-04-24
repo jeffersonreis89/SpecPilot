@@ -1,13 +1,77 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 
+type ApiErrorResponse = {
+  message?: string | string[]
+}
+
+export type AuthUser = {
+  id: string
+  email: string
+  name: string
+}
+
+export type AuthResponse = AuthUser & {
+  accessToken: string
+}
+
+export type PostmanCollection = Record<string, unknown>
+
+export type CollectionPayload = {
+  name: string
+  description?: string
+  baseUrl?: string
+  postmanData: PostmanCollection
+}
+
+export type CollectionSummary = {
+  id: string
+  name: string
+  description?: string
+  baseUrl?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type TestExecutionResult = {
+  id: string
+  requestName: string
+  method: string
+  url: string
+  statusCode: number
+  status: 'passed' | 'failed' | 'error'
+  duration?: number
+  errorMessage?: string
+  executedAt: string
+}
+
+export type TestExecutionStats = {
+  total: number
+  passed: number
+  failed: number
+  error: number
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+
+export function getApiErrorMessage(error: unknown, fallback: string) {
+  if (axios.isAxiosError<ApiErrorResponse>(error)) {
+    const message = error.response?.data?.message
+    if (Array.isArray(message)) {
+      return message.join(', ')
+    }
+    if (message) {
+      return message
+    }
+  }
+
+  return fallback
+}
 
 const api = axios.create({
   baseURL: API_BASE_URL,
 })
 
-// Add token to requests
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token
   if (token) {
@@ -28,30 +92,29 @@ api.interceptors.response.use(
   },
 )
 
-// Auth API
 export const authApi = {
   login: (email: string, password: string) =>
-    api.post('/api/auth/login', { email, password }),
+    api.post<AuthResponse>('/api/auth/login', { email, password }),
   register: (email: string, password: string, name: string) =>
-    api.post('/api/auth/register', { email, password, name }),
-  getProfile: () => api.get('/api/auth/profile'),
+    api.post<AuthResponse>('/api/auth/register', { email, password, name }),
+  getProfile: () => api.get<AuthUser>('/api/auth/profile'),
 }
 
-// Collections API
 export const collectionsApi = {
-  create: (data: any) => api.post('/api/collections', data),
-  getAll: () => api.get('/api/collections'),
-  getOne: (id: string) => api.get(`/api/collections/${id}`),
-  update: (id: string, data: any) => api.patch(`/api/collections/${id}`, data),
+  create: (data: CollectionPayload) =>
+    api.post<CollectionSummary>('/api/collections', data),
+  getAll: () => api.get<CollectionSummary[]>('/api/collections'),
+  getOne: (id: string) => api.get<CollectionSummary>(`/api/collections/${id}`),
+  update: (id: string, data: Partial<CollectionPayload>) =>
+    api.patch<CollectionSummary>(`/api/collections/${id}`, data),
   delete: (id: string) => api.delete(`/api/collections/${id}`),
 }
 
-// Test Executions API
 export const testExecutionsApi = {
   execute: (collectionId: string) =>
-    api.post('/api/test-executions/execute', { collectionId }),
+    api.post<TestExecutionResult[]>('/api/test-executions/execute', { collectionId }),
   getHistory: (collectionId: string) =>
-    api.get(`/api/test-executions/history/${collectionId}`),
+    api.get<TestExecutionResult[]>(`/api/test-executions/history/${collectionId}`),
   getStats: (collectionId: string) =>
-    api.get(`/api/test-executions/stats/${collectionId}`),
+    api.get<TestExecutionStats>(`/api/test-executions/stats/${collectionId}`),
 }

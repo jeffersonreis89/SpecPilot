@@ -35,7 +35,9 @@ export class DemoItemsController {
     description: 'Item criado com sucesso.',
     type: DemoItemResponseDto,
   })
-  async create(@Body() createDemoItemDto: CreateDemoItemDto): Promise<DemoItemResponseDto> {
+  async create(
+    @Body() createDemoItemDto: CreateDemoItemDto,
+  ): Promise<DemoItemResponseDto> {
     return this.demoItemsService.create(createDemoItemDto);
   }
 

@@ -1,7 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { CollectionsService } from '../services/collections.service';
-import { CreateCollectionDto, UpdateCollectionDto, CollectionResponseDto } from '../dto/collection.dto';
+import {
+  CreateCollectionDto,
+  UpdateCollectionDto,
+  CollectionResponseDto,
+} from '../dto/collection.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { AuthenticatedRequest } from '../../../common/types/authenticated-request.type';
 
@@ -83,7 +97,10 @@ export class CollectionsController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Request() req: AuthenticatedRequest): Promise<void> {
+  async remove(
+    @Param('id') id: string,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<void> {
     await this.collectionsService.remove(id, req.user.id);
   }
 }

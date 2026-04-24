@@ -1,40 +1,50 @@
-import { useState } from 'react'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { collectionsApi } from '../services/api'
+import {
+  collectionsApi,
+  getApiErrorMessage,
+  type CollectionPayload,
+  type PostmanCollection,
+} from '../services/api'
 
 export default function CollectionsPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CollectionPayload>({
     name: '',
     description: '',
     baseUrl: '',
-    postmanData: null as any,
+    postmanData: {},
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [hasPostmanFile, setHasPostmanFile] = useState(false)
   const navigate = useNavigate()
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        try {
-          const data = JSON.parse(event.target?.result as string)
-          setFormData({ ...formData, postmanData: data })
-          setError('')
-        } catch (err) {
-          setError('Arquivo JSON inválido')
-        }
-      }
-      reader.readAsText(file)
+    if (!file) {
+      return
     }
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target?.result as string) as PostmanCollection
+        setFormData((current) => ({ ...current, postmanData: data }))
+        setHasPostmanFile(true)
+        setError('')
+      } catch {
+        setHasPostmanFile(false)
+        setError('Arquivo JSON invÃ¡lido')
+      }
+    }
+    reader.readAsText(file)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!formData.name || !formData.postmanData) {
-      setError('Nome e arquivo são obrigatórios')
+    if (!formData.name || !hasPostmanFile) {
+      setError('Nome e arquivo sÃ£o obrigatÃ³rios')
       return
     }
 
@@ -42,16 +52,16 @@ export default function CollectionsPage() {
     setError('')
 
     try {
-      const payload = {
+      const payload: CollectionPayload = {
         ...formData,
-        baseUrl: formData.baseUrl.trim() || undefined,
-        description: formData.description.trim() || undefined,
+        baseUrl: formData.baseUrl?.trim() || undefined,
+        description: formData.description?.trim() || undefined,
       }
 
       await collectionsApi.create(payload)
       navigate('/')
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao criar collection')
+    } catch (error) {
+      setError(getApiErrorMessage(error, 'Erro ao criar collection'))
     } finally {
       setLoading(false)
     }
@@ -78,7 +88,9 @@ export default function CollectionsPage() {
               name="name"
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData((current) => ({ ...current, name: e.target.value }))
+              }
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               placeholder="Ex: API de Usuarios"
             />
@@ -86,16 +98,18 @@ export default function CollectionsPage() {
 
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-              Descrição
+              DescriÃ§Ã£o
             </label>
             <textarea
               id="description"
               name="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData((current) => ({ ...current, description: e.target.value }))
+              }
               rows={3}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="Descrição da collection"
+              placeholder="DescriÃ§Ã£o da collection"
             />
           </div>
 
@@ -107,8 +121,10 @@ export default function CollectionsPage() {
               id="baseUrl"
               name="baseUrl"
               type="url"
-              value={formData.baseUrl}
-              onChange={(e) => setFormData({ ...formData, baseUrl: e.target.value })}
+              value={formData.baseUrl ?? ''}
+              onChange={(e) =>
+                setFormData((current) => ({ ...current, baseUrl: e.target.value }))
+              }
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               placeholder="https://api.example.com"
             />
@@ -127,8 +143,8 @@ export default function CollectionsPage() {
               className="mt-1 block w-full"
               required
             />
-            {formData.postmanData && (
-              <p className="mt-2 text-sm text-green-600">✓ Arquivo carregado</p>
+            {hasPostmanFile && (
+              <p className="mt-2 text-sm text-green-600">âœ“ Arquivo carregado</p>
             )}
           </div>
 

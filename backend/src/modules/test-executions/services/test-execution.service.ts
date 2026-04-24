@@ -1,7 +1,11 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { TestResult } from '../entities/test-result.entity';
 import { Collection } from '../../collections/entities/collection.entity';
 import { ExecuteTestDto } from '../dto/test-execution.dto';
@@ -34,7 +38,8 @@ export class TestExecutionService {
     }
 
     const results: TestResult[] = [];
-    const baseUrl = collection.baseUrl || this.extractBaseUrl(postmanCollection);
+    const baseUrl =
+      collection.baseUrl || this.extractBaseUrl(postmanCollection);
     const variables = this.buildVariableMap(postmanCollection, baseUrl);
 
     // Iterate through requests
@@ -69,13 +74,18 @@ export class TestExecutionService {
       const response = await axios({
         method,
         url,
-        headers: request.header ? this.parseHeaders(request.header, variables) : {},
-        data: request.body?.raw ? this.resolveVariables(request.body.raw, variables) : undefined,
+        headers: request.header
+          ? this.parseHeaders(request.header, variables)
+          : {},
+        data: request.body?.raw
+          ? this.resolveVariables(request.body.raw, variables)
+          : undefined,
         validateStatus: () => true, // Don't throw on any status
       });
 
       const duration = Date.now() - startTime;
-      const status = response.status >= 200 && response.status < 300 ? 'passed' : 'failed';
+      const status =
+        response.status >= 200 && response.status < 300 ? 'passed' : 'failed';
 
       const testResult = this.testResultRepository.create({
         requestName: item.name,
@@ -91,7 +101,8 @@ export class TestExecutionService {
 
       return this.testResultRepository.save(testResult);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
 
       const testResult = this.testResultRepository.create({
         requestName: item.name,
@@ -115,7 +126,9 @@ export class TestExecutionService {
   ): string {
     if (typeof url === 'string') {
       const resolvedUrl = this.resolveVariables(url, variables);
-      return resolvedUrl.startsWith('http') ? resolvedUrl : `${baseUrl}${resolvedUrl}`;
+      return resolvedUrl.startsWith('http')
+        ? resolvedUrl
+        : `${baseUrl}${resolvedUrl}`;
     }
 
     if (url.raw) {
@@ -139,7 +152,10 @@ export class TestExecutionService {
     return result;
   }
 
-  private buildVariableMap(collection: any, baseUrl: string): Record<string, string> {
+  private buildVariableMap(
+    collection: any,
+    baseUrl: string,
+  ): Record<string, string> {
     const variables: Record<string, string> = {
       baseUrl,
     };
@@ -155,7 +171,10 @@ export class TestExecutionService {
     return variables;
   }
 
-  private resolveVariables(value: string, variables: Record<string, string>): string {
+  private resolveVariables(
+    value: string,
+    variables: Record<string, string>,
+  ): string {
     if (!value) {
       return value;
     }

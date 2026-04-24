@@ -2,7 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Collection } from '../entities/collection.entity';
-import { CreateCollectionDto, UpdateCollectionDto } from '../dto/collection.dto';
+import {
+  CreateCollectionDto,
+  UpdateCollectionDto,
+} from '../dto/collection.dto';
 
 @Injectable()
 export class CollectionsService {

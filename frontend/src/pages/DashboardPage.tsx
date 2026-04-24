@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
-import { collectionsApi, testExecutionsApi } from '../services/api'
+import {
+  collectionsApi,
+  getApiErrorMessage,
+  testExecutionsApi,
+  type CollectionSummary,
+} from '../services/api'
 
 export default function DashboardPage() {
-  const [collections, setCollections] = useState<any[]>([])
+  const [collections, setCollections] = useState<CollectionSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const navigate = useNavigate()
@@ -18,8 +23,8 @@ export default function DashboardPage() {
     try {
       const response = await collectionsApi.getAll()
       setCollections(response.data)
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao carregar collections')
+    } catch (error) {
+      setError(getApiErrorMessage(error, 'Erro ao carregar collections'))
     } finally {
       setLoading(false)
     }
@@ -34,8 +39,8 @@ export default function DashboardPage() {
     try {
       await testExecutionsApi.execute(collectionId)
       navigate(`/collections/${collectionId}/results`)
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao executar testes')
+    } catch (error) {
+      setError(getApiErrorMessage(error, 'Erro ao executar testes'))
     }
   }
 

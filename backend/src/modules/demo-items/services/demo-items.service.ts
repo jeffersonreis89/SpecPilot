@@ -36,7 +36,10 @@ export class DemoItemsService {
     return item;
   }
 
-  async update(id: string, updateDemoItemDto: UpdateDemoItemDto): Promise<DemoItem> {
+  async update(
+    id: string,
+    updateDemoItemDto: UpdateDemoItemDto,
+  ): Promise<DemoItem> {
     const item = await this.findOne(id);
 
     Object.assign(item, updateDemoItemDto);

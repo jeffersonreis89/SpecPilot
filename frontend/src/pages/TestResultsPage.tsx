@@ -1,32 +1,42 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { testExecutionsApi } from '../services/api'
+import {
+  getApiErrorMessage,
+  testExecutionsApi,
+  type TestExecutionResult,
+  type TestExecutionStats,
+} from '../services/api'
 
 export default function TestResultsPage() {
   const { id: collectionId } = useParams<{ id: string }>()
-  const [results, setResults] = useState<any[]>([])
-  const [stats, setStats] = useState<any>(null)
+  const [results, setResults] = useState<TestExecutionResult[]>([])
+  const [stats, setStats] = useState<TestExecutionStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (collectionId) loadResults()
-  }, [collectionId])
-
-  const loadResults = async () => {
-    try {
-      const resultsResponse = await testExecutionsApi.getHistory(collectionId!)
-      const statsResponse = await testExecutionsApi.getStats(collectionId!)
-
-      setResults(resultsResponse.data)
-      setStats(statsResponse.data)
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao carregar resultados')
-    } finally {
+    if (!collectionId) {
       setLoading(false)
+      return
     }
-  }
+
+    const loadResults = async () => {
+      try {
+        const resultsResponse = await testExecutionsApi.getHistory(collectionId)
+        const statsResponse = await testExecutionsApi.getStats(collectionId)
+
+        setResults(resultsResponse.data)
+        setStats(statsResponse.data)
+      } catch (error) {
+        setError(getApiErrorMessage(error, 'Erro ao carregar resultados'))
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    void loadResults()
+  }, [collectionId])
 
   if (loading) {
     return (
@@ -46,7 +56,7 @@ export default function TestResultsPage() {
                 onClick={() => navigate('/')}
                 className="text-gray-600 hover:text-gray-900 mr-4"
               >
-                ← Voltar
+                â† Voltar
               </button>
               <h1 className="text-xl font-bold text-gray-900">Resultados dos Testes</h1>
             </div>
@@ -90,7 +100,7 @@ export default function TestResultsPage() {
                   Request
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">
-                  Método
+                  MÃ©todo
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">
                   URL
@@ -99,7 +109,7 @@ export default function TestResultsPage() {
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">
-                  Duração
+                  DuraÃ§Ã£o
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">
                   Resultado
@@ -125,7 +135,9 @@ export default function TestResultsPage() {
                       {result.statusCode}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{result.duration}ms</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    {result.duration ?? 0}ms
+                  </td>
                   <td className="px-6 py-4 text-sm">
                     <span
                       className={`px-2 py-1 rounded text-xs font-semibold ${
@@ -136,7 +148,11 @@ export default function TestResultsPage() {
                             : 'bg-yellow-100 text-yellow-800'
                       }`}
                     >
-                      {result.status === 'passed' ? '✓ Passou' : result.status === 'failed' ? '✗ Falhou' : '⚠ Erro'}
+                      {result.status === 'passed'
+                        ? 'âœ“ Passou'
+                        : result.status === 'failed'
+                          ? 'âœ— Falhou'
+                          : 'âš  Erro'}
                     </span>
                   </td>
                 </tr>

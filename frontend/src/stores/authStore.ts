@@ -1,17 +1,20 @@
 import { create } from 'zustand'
+import type { AuthUser } from '../services/api'
 
 interface AuthStore {
   token: string | null
-  user: { id: string; email: string; name: string } | null
-  login: (token: string, user: any) => void
+  user: AuthUser | null
+  login: (token: string, user: AuthUser) => void
   logout: () => void
   setToken: (token: string) => void
 }
 
+const storedUser = localStorage.getItem('user')
+
 export const useAuthStore = create<AuthStore>((set) => ({
   token: localStorage.getItem('authToken'),
-  user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null,
-  
+  user: storedUser ? (JSON.parse(storedUser) as AuthUser) : null,
+
   login: (token, user) => {
     localStorage.setItem('authToken', token)
     localStorage.setItem('user', JSON.stringify(user))

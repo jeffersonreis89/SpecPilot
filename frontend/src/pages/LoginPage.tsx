@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
-import { authApi } from '../services/api'
+import { authApi, getApiErrorMessage } from '../services/api'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -11,7 +11,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const { login } = useAuthStore()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setError('')
@@ -22,8 +22,8 @@ export default function LoginPage() {
 
       login(accessToken, { id, email, name })
       navigate('/')
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao fazer login')
+    } catch (error) {
+      setError(getApiErrorMessage(error, 'Erro ao fazer login'))
     } finally {
       setLoading(false)
     }
